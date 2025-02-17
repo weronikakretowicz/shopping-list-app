@@ -1,14 +1,32 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
+import { connectDB } from './db';
+import { cors } from 'hono/cors';
+import { startWebSocketServer } from './websockets';
+import { createServer } from 'http';
+import { PORT } from './config';
+import {app} from "./app";
 
-const app = new Hono();
+connectDB();
 
-app.get('/', (c) => c.text('Backend działa! 🚀'));
-
-// Uruchomienie serwera w Node.js
-serve({
-    fetch: app.fetch,
-    port: 3001,
+app.use('*', cors());
+app.use('*', async (c, next) => {
+    c.res.headers.set('Content-Type', 'application/json');
+    await next();
 });
 
-console.log('🚀 Backend działa na http://localhost:3001');
+// Tworzenie serwera HTTP dla WebSocketów
+const server = createServer();
+startWebSocketServer(server);
+
+// Uruchomienie serwera HTTP z API Hono
+serve({
+    fetch: app.fetch,
+    port: Number(PORT),
+});
+
+server.listen(3002, () => {
+    console.log('📡 WebSocket server running on port 3002');
+});
+
+console.log(`🚀 Server is running on http://localhost:${PORT}`);
