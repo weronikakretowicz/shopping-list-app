@@ -2,7 +2,6 @@ FROM node:18
 
 WORKDIR /app
 
-# Skopiuj pliki package.json i package-lock.json
 COPY package*.json ./
 
 RUN npm install
