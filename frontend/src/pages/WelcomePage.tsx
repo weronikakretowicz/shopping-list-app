@@ -23,23 +23,28 @@ const WelcomePage = () => {
                             navigate("/home");
                         } else navigate("/login");
                     }}
-                    className="px-4 py-2 btn-secondary"
+                    className="px-4 py-2 btn-primary"
                 >
                     Login
                 </Button>
             </Header>
 
             <div
-                className="absolute inset-0 bg-center bg-cover"
+                className="absolute inset-0 bg-center bg-cover w-full h-full"
                 style={{backgroundImage: "url('/assets/grocery_background.jpeg')"}}
             ></div>
 
             {bgLoaded && (
-                <div className="absolute inset-0 bg-black opacity-50 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 w-full h-full bg-black opacity-50 transition-opacity duration-500"></div>
             )}
 
-            <div className="relative flex items-start h-full text-white z-10 px-4 text-center">
-                <div className="relative flex flex-col items-start justify-start h-full text-white px-10 mt-24">
+            <div
+                // className="relative flex items-start h-full text-white z-10 px-4 text-center"
+                className=""
+            >
+                <div
+                    // className="relative flex flex-col items-start md:justify-start sm:justify-center h-full text-white px-10 mt-24"
+                >
                     <h1 className="text-3xl font-bold mb-4">Welcome to CoList</h1>
                     <p className="text-2xl mb-8 font-semibold">
                         Sharing your shopping list has never been <span className="italic">easier!</span>
@@ -56,7 +61,7 @@ const WelcomePage = () => {
                     <Button
                         variant="default"
                         onClick={() => navigate("/register")}
-                        className="px-4 py-2 btn-secondary"
+                        className="px-4 py-2 btn-primary"
                     >
                         Get Started
                     </Button>
