@@ -44,10 +44,15 @@
   /*--radius: 0.6rem;*/
 
   --primary-green: #4caf50;
+  --primary-gray: #404040;
 }
 
 .text-green {
   color: var(--primary-green);
+}
+
+.text-gray {
+  color: var(--primary-gray);
 }
 
 a {
@@ -64,10 +69,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  font-family: 'Poppins', sans-serif;
 }
 
 h1 {
   font-size: 3.2em;
+  line-height: 1.1;
+}
+h2 {
+  font-size: 1.5em;
   line-height: 1.1;
 }
 
