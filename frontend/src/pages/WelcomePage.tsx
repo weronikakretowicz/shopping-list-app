@@ -6,7 +6,7 @@ const WelcomePage = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="relative min-h-screen w-screen">
+        <div className="flex relative min-h-screen w-screen">
             <div
                 className="absolute inset-0 bg-center bg-cover w-full h-full"
                 style={{backgroundImage: "url('/assets/grocery_background.jpeg')"}}

@@ -45,7 +45,7 @@ function RegisterPage() {
 
 
     return (
-        <div className="relative h-screen w-screen">
+        <div className="flex relative h-screen w-screen">
             <div className="flex flex-row h-screen w-full">
                 <div className="relative flex-1 flex items-center justify-start flex-col text-white p-10">
                     <div
@@ -71,9 +71,9 @@ function RegisterPage() {
                     </div>
                 </div>
                 <div className="flex-1 flex items-center justify-center flex-col gap-10">
-                    <div className="flex flex-col justify-center gap-4">
-                        <h3 className="font-bold text-2xl">Create an account</h3>
-                        <p className="flex flex-row text-grayMedium text-xs mx-auto">
+                    <div className="flex flex-col justify-center gap-4 text-gray">
+                        <h2 className="font-bold">Create an account</h2>
+                        <p className="flex flex-row text-sm mx-auto">
                             Already have an account?
                             <a href="/login" className="font-bold text-green ml-2">
                                 Sign in
