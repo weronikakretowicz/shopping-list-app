@@ -59,10 +59,15 @@ function RegisterPage() {
                     <div className="absolute inset-0 bg-black opacity-40"></div>
 
                     <div className="flex flex-col items-center justify-start mt-32">
-                        <h1 className="relative z-10 text-5xl font-bold mb-2">
-                            Streamline School
+                        <h1 className="relative z-10 text-5xl font-bold mb-4">
+                            Welcome to CoList
                         </h1>
-                        <h1 className="relative z-10 text-5xl font-bold">Fundraising</h1>
+                        <h1 className="relative z-10 text-5xl font-bold">
+                            Your Shared
+                        </h1>
+                        <h1 className="relative z-10 text-5xl font-bold">
+                            Shopping Experience
+                        </h1>
                     </div>
                 </div>
                 <div className="flex-1 flex items-center justify-center flex-col gap-10">
