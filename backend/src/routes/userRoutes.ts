@@ -6,8 +6,6 @@ import { registerSchema, loginSchema } from "../validators/userValidators";
 import { JWT_SECRET } from "../config";
 import jwt from "jsonwebtoken";
 
-console.log("USERS!");
-
 app.get("/users/status", (c) => {
   console.log("users status");
 
@@ -26,19 +24,31 @@ app.post("/users/register", validateRequest(registerSchema), async (c) => {
   const user = new User({ username, email, passwordHash });
   await user.save();
 
-  return c.json({ message: "User registered successfully", user });
+  return c.json({
+    message: "User registered successfully",
+    user: {
+      username: user.username,
+      email: user.email,
+    },
+  });
 });
 
 app.post("/users/login", validateRequest(loginSchema), async (c) => {
   const { email, password } = await c.req.json();
   const user = await User.findOne({ email });
 
+  console.log("LOGIN STARTED");
+
   if (!user) {
+    console.log("Error");
+
     return c.json({ error: "User doesn't exist" }, 401);
   }
 
   const isValidPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isValidPassword) {
+    console.log("Validation error");
+
     return c.json({ error: "Invalid credentials" }, 401);
   }
 
@@ -46,11 +56,12 @@ app.post("/users/login", validateRequest(loginSchema), async (c) => {
     expiresIn: "1h",
   });
 
+  console.log("Success");
+
   return c.json({
     message: "Login successful",
     token,
     user: {
-      _id: user._id,
       username: user.username,
       email: user.email,
     },

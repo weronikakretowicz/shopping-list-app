@@ -1,31 +1,19 @@
-import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { connectDB } from "./db";
-import { cors } from "hono/cors";
 import { startWebSocketServer } from "./websockets";
 import { createServer } from "http";
 import { PORT } from "./config";
 import { app } from "./app";
 
-import "./routes";
-
 connectDB();
 
-app.use("*", cors());
-app.use("*", async (c, next) => {
-  c.res.headers.set("Content-Type", "application/json");
-  await next();
-});
+import "./routes";
 
 // Tworzenie serwera HTTP dla WebSocketów
 const server = createServer();
 startWebSocketServer(server);
 
-app.get("/status", (c) => {
-  return c.text("Working...");
-});
-
-app.get("/test", (c) => c.text("Hono!!"));
+app.get("/status", (c) => c.text("Working..."));
 
 // Uruchomienie serwera HTTP z API Hono
 serve({
