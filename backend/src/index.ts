@@ -7,6 +7,8 @@ import { createServer } from "http";
 import { PORT } from "./config";
 import { app } from "./app";
 
+import "./routes";
+
 connectDB();
 
 app.use("*", cors());
