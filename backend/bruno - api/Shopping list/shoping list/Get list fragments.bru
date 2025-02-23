@@ -1,0 +1,20 @@
+meta {
+  name: Get list fragments
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{BACKEND_API}}/list?page=1&limit=2
+  body: none
+  auth: bearer
+}
+
+params:query {
+  page: 1
+  limit: 2
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const ItemSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    quantity: { type: Number, required: true },
+    quantity: { type: Number, default: 1 },
     unit: { type: String, default: '' },
     bought: { type: Boolean, default: false }
 });

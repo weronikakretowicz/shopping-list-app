@@ -1,0 +1,28 @@
+meta {
+  name: Edit list
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{BACKEND_API}}/list/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 67bb8c4851e74af423841b0d
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "name": "New list 2",
+    "items": [
+      { "name": "chocolate" }
+    ]
+  }
+}
