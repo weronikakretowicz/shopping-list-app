@@ -1,0 +1,15 @@
+meta {
+  name: Get lists
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BACKEND_API}}/list/all
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Create list
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BACKEND_API}}/list
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "name": "New list 2",
+    "items": [
+      {
+        "name": "Banana"
+      },
+      {
+        "name": "Cheese"
+      }
+    ]
+  }
+}
