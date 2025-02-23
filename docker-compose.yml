@@ -1,4 +1,4 @@
-version: "3.8"
+# version: "3.8"
 
 services:
   mongo:
@@ -9,17 +9,15 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    # networks:
-    #   - shopping_network
 
   backend:
     container_name: backend_app
     build:
       context: ./backend
       dockerfile: Dockerfile
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./backend:/app
+    #   - /app/node_modules
     restart: always
     ports:
       - "3001:3001"
@@ -27,27 +25,38 @@ services:
       - mongo
     environment:
       MONGO_URI: "mongodb://mongo:27017/shopping"
-    # networks:
-    #   - shopping_network
+    develop:
+      watch:
+        - path: ./backend
+          target: ./app
+          action: sync
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./backend/package.json
 
   frontend:
     container_name: frontend_app
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./frontend:/app
+    #   - /app/node_modules
     restart: always
     ports:
       - "5173:5173"
     depends_on:
       - backend
-    # networks:
-    #   - shopping_network
+    develop:
+      watch:
+        - path: ./frontend
+          target: ./app
+          action: sync
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./frontend/package.json
 
 volumes:
   mongo_data:
-# networks:
-#   shopping_network:
-#     driver: bridge

@@ -19,7 +19,10 @@ app.use("*", async (c, next) => {
 const server = createServer();
 startWebSocketServer(server);
 
-// Routing
+app.get("/status", (c) => {
+  return c.text("Working...");
+});
+
 app.get("/test", (c) => c.text("Hono!!"));
 
 // Uruchomienie serwera HTTP z API Hono
