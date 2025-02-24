@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -37,15 +37,13 @@ export default function Login() {
     setLoading(true);
     try {
       const result = await loginMutation.mutateAsync(data);
+
       if (result?.token) {
-        // localStorage.set("access_token", result.token, {
-        //   expires: 1,
-        //   secure: true,
-        // });
-
         setAccessToken(result.token);
+        localStorage.setItem("access_token", result.token);
 
-        navigate(ROUTES.HOMEPAGE);
+        console.log("navigate to board");
+        navigate(ROUTES.BOARD);
       }
     } finally {
       setLoading(false);

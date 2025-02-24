@@ -3,10 +3,11 @@ import WelcomePage from "./pages/WelcomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { Toaster } from "react-hot-toast";
-import { Home } from "./pages/Home";
+import { Board } from "./pages/Board.tsx";
 
 import { ROUTES } from "./pages/routes";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
+import { Logout } from "./pages/Logout.tsx";
 
 function App() {
   return (
@@ -14,12 +15,13 @@ function App() {
       <Routes>
         <Route index path={ROUTES.WELCOMEPAGE} element={<WelcomePage />} />
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+        <Route path={ROUTES.LOGOUT} element={<Logout />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route
-          path={ROUTES.HOMEPAGE}
+          path={ROUTES.BOARD}
           element={
             <ProtectedRoute>
-              <Home />
+              <Board />
             </ProtectedRoute>
           }
         />

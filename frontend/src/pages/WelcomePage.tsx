@@ -19,7 +19,7 @@ const WelcomePage = () => {
             variant="default"
             onClick={() => {
               if (accessToken) {
-                navigate(ROUTES.HOMEPAGE);
+                navigate(ROUTES.BOARD);
               } else navigate("/login");
             }}
             className="px-4 py-2 btn-primary"

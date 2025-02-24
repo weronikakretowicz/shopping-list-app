@@ -37,8 +37,6 @@ app.post("/users/login", validateRequest(loginSchema), async (c) => {
   const { email, password } = await c.req.json();
   const user = await User.findOne({ email });
 
-  console.log("LOGIN STARTED");
-
   if (!user) {
     console.log("Error");
 
@@ -55,8 +53,6 @@ app.post("/users/login", validateRequest(loginSchema), async (c) => {
   const token = jwt.sign({ userId: user._id.toString() }, JWT_SECRET, {
     expiresIn: "1h",
   });
-
-  console.log("Success");
 
   return c.json({
     message: "Login successful",
