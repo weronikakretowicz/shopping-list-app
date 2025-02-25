@@ -8,14 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button.tsx";
 import { clsx } from "clsx";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRegister } from "@/api/auth/auth.queries.ts";
 import { Spinner } from "@/components/Spinner.tsx";
 import { ROUTES } from "./routes";
@@ -36,9 +29,7 @@ function RegisterPage() {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof registerSchema>> = async (
-    data,
-  ) => {
+  const onSubmit: SubmitHandler<z.infer<typeof registerSchema>> = async (data) => {
     await registerMutation.mutateAsync(data);
     navigate(ROUTES.LOGIN);
   };
@@ -58,13 +49,9 @@ function RegisterPage() {
           <div className="absolute inset-0 bg-black opacity-40"></div>
 
           <div className="flex flex-col items-center justify-start mt-32">
-            <h1 className="relative z-10 text-5xl font-bold mb-4">
-              Welcome to CoList
-            </h1>
+            <h1 className="relative z-10 text-5xl font-bold mb-4">Welcome to CoList</h1>
             <h1 className="relative z-10 text-5xl font-bold">Your Shared</h1>
-            <h1 className="relative z-10 text-5xl font-bold">
-              Shopping Experience
-            </h1>
+            <h1 className="relative z-10 text-5xl font-bold">Shopping Experience</h1>
           </div>
         </div>
         <div className="flex-1 flex items-center justify-center flex-col gap-10">
@@ -95,11 +82,7 @@ function RegisterPage() {
                     <FormItem className="">
                       <div className="flex flex-col w-full gap-2">
                         <FormControl>
-                          <Input
-                            className="shadow"
-                            placeholder="First name"
-                            {...field}
-                          />
+                          <Input className="shadow" placeholder="First name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -114,11 +97,7 @@ function RegisterPage() {
                     <FormItem className="">
                       <div className="flex flex-col w-full gap-2">
                         <FormControl>
-                          <Input
-                            className="shadow"
-                            placeholder="Last name"
-                            {...field}
-                          />
+                          <Input className="shadow" placeholder="Last name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -133,12 +112,7 @@ function RegisterPage() {
                     <FormItem className="">
                       <div className="flex flex-col w-full gap-2">
                         <FormControl>
-                          <Input
-                            className="shadow"
-                            placeholder="Email"
-                            type="email"
-                            {...field}
-                          />
+                          <Input className="shadow" placeholder="Email" type="email" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -153,12 +127,7 @@ function RegisterPage() {
                     <FormItem className="">
                       <div className="flex flex-col w-full gap-2">
                         <FormControl>
-                          <Input
-                            className="shadow"
-                            type="password"
-                            placeholder="Password"
-                            {...field}
-                          />
+                          <Input className="shadow" type="password" placeholder="Password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -173,12 +142,7 @@ function RegisterPage() {
                     <FormItem className="">
                       <div className="flex flex-col w-full gap-2">
                         <FormControl>
-                          <Input
-                            className="shadow"
-                            type="password"
-                            placeholder="Repeat password"
-                            {...field}
-                          />
+                          <Input className="shadow" type="password" placeholder="Repeat password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -193,10 +157,7 @@ function RegisterPage() {
                     <FormItem className="flex flex-col items-center p-2">
                       <div className="flex flex-row items-center space-x-2 space-y-0">
                         <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
+                          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
                         <FormLabel className="text-sm cursor-pointer">
                           I accept the terms and conditions and privacy policy

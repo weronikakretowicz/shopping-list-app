@@ -4,13 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Header } from "@/components/Header";
 import { Spinner } from "@/components/Spinner";
 import { useLogin } from "@/api/auth/auth.queries";
@@ -42,8 +36,7 @@ export default function Login() {
         setAccessToken(result.token);
         localStorage.setItem("access_token", result.token);
 
-        console.log("navigate to board");
-        navigate(ROUTES.BOARD);
+        navigate(ROUTES.MYLISTS);
       }
     } finally {
       setLoading(false);
@@ -111,12 +104,7 @@ export default function Login() {
                     <FormItem>
                       <div className="flex flex-col gap-2">
                         <FormControl>
-                          <Input
-                            id="password"
-                            placeholder="Password"
-                            type="password"
-                            {...field}
-                          />
+                          <Input id="password" placeholder="Password" type="password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -124,11 +112,7 @@ export default function Login() {
                   )}
                 />
 
-                <Button
-                  type="submit"
-                  className={clsx("mt-5 rounded-bl shadow", "btn-secondary")}
-                  disabled={loading}
-                >
+                <Button type="submit" className={clsx("mt-5 rounded-bl shadow", "btn-secondary")} disabled={loading}>
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <Spinner />
@@ -142,10 +126,7 @@ export default function Login() {
             </Form>
             <p className="text-gray">
               New User?{" "}
-              <a
-                href="/register"
-                className="text-green font-bold hover:underline"
-              >
+              <a href="/register" className="text-green font-bold hover:underline">
                 Sign up
               </a>
             </p>

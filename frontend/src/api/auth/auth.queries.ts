@@ -1,19 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import type { AuthResponse, LoginPayload, RegisterPayload, UpdatePasswordPayload } from "@/api/auth/auth.types.ts";
 import axiosInstance from "@/api/axiosInstance.ts";
 import { handleError } from "@/utils/handleError";
+import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {
-  AuthResponse,
-  LoginPayload,
-  RegisterPayload,
-  UpdatePasswordPayload,
-} from "@/api/auth/auth.types.ts";
-import { useAccessToken } from "@/atoms/accessToken";
-import { ROUTES } from "@/pages/routes";
-import { useLocation, useNavigate } from "react-router-dom";
-import { debug } from "util";
-import { useEffect } from "react";
-import { cx } from "class-variance-authority";
 
 export const useRegister = () => {
   return useMutation({
