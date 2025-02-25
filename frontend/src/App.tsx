@@ -29,9 +29,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path={ROUTES.MYLISTS} element={<MyListsPage />} />
-        <Route path={ROUTES.SHAREDLISTS} element={<SharedListsPage />} />
-        <Route path={ROUTES.NEWLIST} element={<NewList />} />
+        <Route
+          path={ROUTES.MYLISTS}
+          element={
+            <ProtectedRoute>
+              <MyListsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.SHAREDLISTS}
+          element={
+            <ProtectedRoute>
+              <SharedListsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.NEWLIST}
+          element={
+            <ProtectedRoute>
+              <NewList />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path={ROUTES.EDIT_LIST}
           element={
