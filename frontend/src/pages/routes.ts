@@ -4,4 +4,7 @@ export const ROUTES = {
   BOARD: "/board",
   WELCOMEPAGE: "/",
   LOGOUT: "/logout",
+  MYLISTS: "/myLists",
+  SHAREDLISTS: "/sharedLists",
+  NEWLIST: "/newList",
 };

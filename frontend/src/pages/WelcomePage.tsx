@@ -33,23 +33,12 @@ const WelcomePage = () => {
           <div className="flex flex-1 flex-col justify-start mt-28 items-center z-10 p-4 ">
             <h1 className="text-3xl font-bold mb-4">Welcome to CoList</h1>
             <p className="text-2xl mb-8 font-semibold">
-              Sharing your shopping list has never been{" "}
-              <span className="italic">easier!</span>
+              Sharing your shopping list has never been <span className="italic">easier!</span>
             </p>
-            <p className="mb-2">
-              Invite your family and friends to collaborate on your list.
-            </p>
-            <p className="mb-2">
-              Get real-time updates as items are added, removed, or changed.
-            </p>
-            <p className="mb-8">
-              Organize and manage your shared shopping list seamlessly.
-            </p>
-            <Button
-              variant="default"
-              onClick={() => navigate("/register")}
-              className="px-4 py-2 btn-primary"
-            >
+            <p className="mb-2">Invite your family and friends to collaborate on your list.</p>
+            <p className="mb-2">Get real-time updates as items are added, removed, or changed.</p>
+            <p className="mb-8">Organize and manage your shared shopping list seamlessly.</p>
+            <Button variant="default" onClick={() => navigate("/register")} className="px-4 py-2 btn-primary">
               Get Started
             </Button>
           </div>

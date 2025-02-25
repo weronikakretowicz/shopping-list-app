@@ -4,10 +4,13 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { Toaster } from "react-hot-toast";
 import { Board } from "./pages/Board.tsx";
+import MyListsPage from "@/pages/MyListsPage.tsx";
 
 import { ROUTES } from "./pages/routes";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 import { Logout } from "./pages/Logout.tsx";
+import SharedListsPage from "@/pages/SharedListsPage.tsx";
+import NewList from "@/pages/NewList.tsx";
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path={ROUTES.MYLISTS} element={<MyListsPage />} />
+        <Route path={ROUTES.SHAREDLISTS} element={<SharedListsPage />} />
+        <Route path={ROUTES.NEWLIST} element={<NewList />} />
       </Routes>
       <Toaster position="bottom-right" reverseOrder={false} />
     </BrowserRouter>
