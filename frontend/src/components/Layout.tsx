@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider>
       {/*<AppSidebar />*/}
-      <main>
+      <main className="w-full">
         {/*<SidebarTrigger/>*/}
         {children}
       </main>

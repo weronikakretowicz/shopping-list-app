@@ -11,6 +11,7 @@ import { addListSchema } from "@/schemas/addListSchema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import type { z } from "zod";
 
 const NewList = () => {
@@ -33,8 +34,20 @@ const NewList = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof addListSchema>> = async (data) => {
-    await addListMutation.mutateAsync(data);
-    navigate(ROUTES.MYLISTS);
+    try {
+      await addListMutation.mutateAsync({
+        ...data,
+        items: data.items.map((item) => ({
+          ...item,
+          quantity: Number(item.quantity),
+        })),
+      });
+
+      navigate(ROUTES.MYLISTS);
+    } catch (error) {
+      toast.error("Failed to create list. Please try again.");
+      console.error("Error creating list:", error);
+    }
   };
 
   return (
@@ -64,7 +77,13 @@ const NewList = () => {
                   </form>
                 </Form>
 
-                <Button type="submit" className="btn-secondary" variant="default" disabled={addListMutation.isPending}>
+                <Button
+                  type="button"
+                  className="btn-secondary"
+                  variant="default"
+                  disabled={addListMutation.isPending}
+                  onClick={form.handleSubmit(onSubmit)}
+                >
                   {addListMutation.isPending ? (
                     <span className="flex items-center gap-2">
                       <Spinner />
@@ -143,10 +162,6 @@ const NewList = () => {
                 </Form>
               </div>
             </div>
-
-            {/*<div className="flex flex-1 px-4 py-8 sticky top-0 z-10 justify-end items-start">*/}
-            {/*  */}
-            {/*</div>*/}
           </div>
         </div>
       </div>

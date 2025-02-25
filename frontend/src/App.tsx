@@ -11,6 +11,7 @@ import { ProtectedRoute } from "./utils/ProtectedRoute";
 import { Logout } from "./pages/Logout.tsx";
 import SharedListsPage from "@/pages/SharedListsPage.tsx";
 import NewList from "@/pages/NewList.tsx";
+import EditList from "@/pages/EditList.tsx";
 
 function App() {
   return (
@@ -31,6 +32,14 @@ function App() {
         <Route path={ROUTES.MYLISTS} element={<MyListsPage />} />
         <Route path={ROUTES.SHAREDLISTS} element={<SharedListsPage />} />
         <Route path={ROUTES.NEWLIST} element={<NewList />} />
+        <Route
+          path={ROUTES.EDIT_LIST}
+          element={
+            <ProtectedRoute>
+              <EditList />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Toaster position="bottom-right" reverseOrder={false} />
     </BrowserRouter>

@@ -46,6 +46,22 @@ app.post("/list", authMiddleware, validateRequest(createListSchema), async (c) =
   return c.json({ message: "List created successfully", list: list });
 });
 
+app.get("/list/:id", authMiddleware, async (c) => {
+  const userId = c.env.userId;
+  if (!userId) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const { id } = c.req.param();
+  const list = await ShoppingList.findById(id);
+  
+  if (!list) {
+    return c.json({ error: "List not found" }, 404);
+  }
+
+  return c.json(list);
+});
+
 app.get("/list", authMiddleware, async ({ req, json }) => {
   try {
     // Extract page and limit from query parameters, with default values
@@ -86,6 +102,8 @@ app.get("/list", authMiddleware, async ({ req, json }) => {
 });
 
 app.put("/list/:id", authMiddleware, validateRequest(updateListSchema), async (c) => {
+  console.log("update list called");
+  
   const userId = c.env.userId;
   if (!userId) {
     return c.json({ error: "Unauthorized" }, 401);
@@ -93,6 +111,8 @@ app.put("/list/:id", authMiddleware, validateRequest(updateListSchema), async (c
 
   const { id } = c.req.param();
   const body = await c.req.json();
+
+  console.log(JSON.stringify({ id, body }, null, 2));
 
   const updatedList = await ShoppingList.findByIdAndUpdate(id, body, { new: true });
   if (!updatedList) {

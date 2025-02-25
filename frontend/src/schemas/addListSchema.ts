@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const itemSchema = z.object({
   name: z.string().min(4, { message: "Item name must have at least 1 character" }),
-  quantity: z.number().min(1, { message: "Item quantity must be at least 1" }).optional(),
+  quantity: z.string().min(1, { message: "Item quantity must be at least 1" }).optional(),
   unit: z.string().optional(),
 });
 

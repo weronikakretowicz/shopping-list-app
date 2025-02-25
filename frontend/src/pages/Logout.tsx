@@ -11,7 +11,5 @@ export const Logout = () => {
     removeAccessToken();
   }, []);
 
-  debugger;
-
   return <Navigate to={ROUTES.LOGIN} />;
 };

@@ -7,4 +7,5 @@ export const ROUTES = {
   MYLISTS: "/myLists",
   SHAREDLISTS: "/sharedLists",
   NEWLIST: "/newList",
+  EDIT_LIST: "/edit-list/:id",
 };
