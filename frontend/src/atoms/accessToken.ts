@@ -7,9 +7,13 @@ export const removeAccessToken = () => {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
 };
 
+export const getAccessTokenFromLocalStorage = () => {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+};
+
 export const accessTokenAtom = atomWithStorage<string | undefined>(
   ACCESS_TOKEN_KEY,
-  localStorage.getItem(ACCESS_TOKEN_KEY) ?? undefined,
+  getAccessTokenFromLocalStorage() ?? undefined,
 );
 
 export const useAccessToken = () => {

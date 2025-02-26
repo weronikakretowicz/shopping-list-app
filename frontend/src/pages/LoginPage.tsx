@@ -45,6 +45,9 @@ export default function Login() {
   };
 
   useLayoutEffect(() => {
+    console.log("accessToken", accessToken);
+    debugger;
+
     if (accessToken) {
       navigate(ROUTES.MYLISTS);
     }
