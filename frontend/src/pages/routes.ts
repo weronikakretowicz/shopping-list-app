@@ -1,11 +1,11 @@
 export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
-  BOARD: "/board",
   WELCOMEPAGE: "/",
   LOGOUT: "/logout",
-  MYLISTS: "/myLists",
-  SHAREDLISTS: "/sharedLists",
-  NEWLIST: "/newList",
+  MYLISTS: "/my-lists",
+  SHAREDLISTS: "/shared-lists",
+  EDIT_SHAREDLISTS: "/edit-shared-lists/:id",
+  NEWLIST: "/my-lists/new",
   EDIT_LIST: "/edit-list/:id",
-};
+} as const;

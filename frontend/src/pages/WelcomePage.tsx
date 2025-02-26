@@ -1,7 +1,7 @@
+import { useAccessToken } from "@/atoms/accessToken.ts";
+import { Button } from "@/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { useAccessToken } from "@/atoms/accessToken.ts";
 import { ROUTES } from "./routes.ts";
 
 const WelcomePage = () => {
@@ -19,15 +19,17 @@ const WelcomePage = () => {
             variant="default"
             onClick={() => {
               if (accessToken) {
-                navigate(ROUTES.BOARD);
-              } else navigate("/login");
+                navigate(ROUTES.MYLISTS);
+              } else {
+                navigate(ROUTES.LOGIN);
+              }
             }}
             className="px-4 py-2 btn-primary"
           >
             Login
           </Button>
         </Header>
-        <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
+        <div className="absolute inset-0 bg-black opacity-40 z-0" />
 
         <div className="flex flex-row text-white h-full w-full">
           <div className="flex flex-1 flex-col justify-start mt-28 items-center z-10 p-4 ">
@@ -38,7 +40,7 @@ const WelcomePage = () => {
             <p className="mb-2">Invite your family and friends to collaborate on your list.</p>
             <p className="mb-2">Get real-time updates as items are added, removed, or changed.</p>
             <p className="mb-8">Organize and manage your shared shopping list seamlessly.</p>
-            <Button variant="default" onClick={() => navigate("/register")} className="px-4 py-2 btn-primary">
+            <Button variant="default" onClick={() => navigate(ROUTES.REGISTER)} className="px-4 py-2 btn-primary">
               Get Started
             </Button>
           </div>

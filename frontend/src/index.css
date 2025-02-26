@@ -45,6 +45,7 @@
 
   --primary-green: #4caf50;
   --primary-gray: #404040;
+  --primary-red: #ef1010;
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
   --sidebar-primary: hsl(240 5.9% 10%);
@@ -61,6 +62,10 @@
 
 .text-gray {
   color: var(--primary-gray);
+}
+
+.bg-red {
+  color: var(--primary-red);
 }
 
 a {
@@ -142,6 +147,36 @@ h2 {
   color: #fff;
 }
 .dark .btn-secondary:hover {
+  background-color: #66bb6a;
+}
+
+.btn-notifications {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: small;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #4caf50;
+  cursor: pointer;
+  transition: background-color 0.25s, box-shadow 0.25s;
+  color: #000;
+}
+
+.btn-notifications:hover {
+  background-color: #82c886;
+}
+
+.btn-notifications:focus,
+.btn-notifications:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.dark .btn-notifications {
+  background-color: #4caf50;
+  color: #fff;
+}
+.dark .btn-notifications:hover {
   background-color: #66bb6a;
 }
 

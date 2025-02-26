@@ -1,0 +1,15 @@
+meta {
+  name: Get all users
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{BACKEND_API}}/users/all
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}

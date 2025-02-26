@@ -21,7 +21,7 @@ type LocalListItem = Omit<ListItem, "_id" | "quantity" | "unit"> & {
   unit?: string | undefined;
 };
 
-const EditList = () => {
+const EditSharedListList = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -109,7 +109,7 @@ const EditList = () => {
   return (
     <Layout
       breadcrumbs={[
-        { label: "My List", path: ROUTES.MYLISTS },
+        { label: "Shared list", path: ROUTES.SHAREDLISTS },
         { label: list?.name ?? "", path: location.pathname },
       ]}
     >
@@ -239,4 +239,4 @@ const EditList = () => {
   );
 };
 
-export default EditList;
+export default EditSharedListList;

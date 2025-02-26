@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import axios from "axios";
 import { useState } from "react";
 
+import axiosInstance from "@/api/axiosInstance";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import axiosInstance from "@/api/axiosInstance";
 
 type ShoppingListItem = {
   bought: boolean;
@@ -80,8 +80,6 @@ export const Board = () => {
   if (isError) {
     return <div>Error loading lists.</div>;
   }
-
-  debugger;
 
   return (
     <div className="p-4">

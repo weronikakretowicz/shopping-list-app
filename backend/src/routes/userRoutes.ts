@@ -1,10 +1,11 @@
-import { app } from "../app";
-import { User } from "../models/User";
 import bcrypt from "bcrypt";
-import { validateRequest } from "../validators/validateRequest";
-import { registerSchema, loginSchema } from "../validators/userValidators";
-import { JWT_SECRET } from "../config";
 import jwt from "jsonwebtoken";
+import { app } from "../app";
+import { JWT_SECRET } from "../config";
+import { authMiddleware } from "../middlewares/authMiddleware";
+import { User } from "../models/User";
+import { loginSchema, registerSchema } from "../validators/userValidators";
+import { validateRequest } from "../validators/validateRequest";
 
 app.get("/users/status", (c) => {
   console.log("users status");
@@ -61,5 +62,31 @@ app.post("/users/login", validateRequest(loginSchema), async (c) => {
       username: user.username,
       email: user.email,
     },
+  });
+});
+
+app.get("/users/all", authMiddleware, async ({ json, env, req }) => {
+  console.log("Users endpoints available");
+
+  const user = await User.find();
+
+  return json({ users: user });
+});
+
+app.get("/user/details", authMiddleware, async ({ json, env, req }) => {
+  const userId = env.userId;
+  if (!userId) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+
+  return json({
+    name: user.username,
+    email: user.email,
+    createdAt: user.createdAt,
   });
 });
