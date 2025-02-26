@@ -29,7 +29,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response.status === 401) {
-      // localStorage.removeItem("access_token");
+      localStorage.removeItem("access_token");
+
+      if (window.location.pathname === ROUTES.LOGIN) {
+        return;
+      }
+
       window.location.href = ROUTES.LOGOUT;
     }
     return Promise.reject(error);
