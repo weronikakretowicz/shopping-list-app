@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import type { z } from "zod";
 import axiosInstance from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { List } from "@/components/ListCard";
+import type { List } from "@/types/List";
 
 const EditList = () => {
     const { id } = useParams<{ id: string }>();
@@ -55,7 +55,7 @@ const EditList = () => {
             queryClient.invalidateQueries({ queryKey: ["list", id] });
             queryClient.invalidateQueries({ queryKey: ["lists"] });
 
-            navigate(ROUTES.MYLISTS);
+            navigate(-1); // Go back to the previous page
         },
         onError: (error) => {
             toast.error("Failed to update list. Please try again.");
@@ -223,7 +223,7 @@ const EditList = () => {
                                                 type="button"
                                                 variant="outline"
                                                 className="btn-secondary"
-                                                onClick={() => append({ name: "", quantity: 1, unit: "" })}
+                                                onClick={() => append({ name: "", quantity: "1", unit: "" })}
                                             >
                                                 Add Product
                                             </Button>

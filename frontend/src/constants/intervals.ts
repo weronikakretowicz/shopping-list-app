@@ -1,0 +1,1 @@
+export const REFRESH_INTERVAL = 5 * 1000; // 5 seconds

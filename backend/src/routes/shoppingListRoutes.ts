@@ -1,8 +1,10 @@
+import { z } from "zod";
 import { app } from "../app";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { ShoppingList } from "../models/ShoppingList";
 import { createListSchema, updateListSchema } from "../validators/listValidators";
 import { validateRequest } from "../validators/validateRequest";
+import { User } from "../models/User";
 
 app.get("/shopping-list/status", (c) => {
   console.log("shoping list status check");
@@ -54,7 +56,7 @@ app.get("/list/:id", authMiddleware, async (c) => {
 
   const { id } = c.req.param();
   const list = await ShoppingList.findById(id);
-  
+
   if (!list) {
     return c.json({ error: "List not found" }, 404);
   }
@@ -62,10 +64,11 @@ app.get("/list/:id", authMiddleware, async (c) => {
   return c.json(list);
 });
 
-app.get("/list", authMiddleware, async ({ req, json }) => {
+app.get("/list", authMiddleware, async ({ req, json, env }) => {
   try {
     // Extract page and limit from query parameters, with default values
     const { page, limit } = req.query();
+    const userId = env.userId;
 
     // Convert page and limit to integers
     const pageNumber = Number.parseInt(page, 10) ?? 1;
@@ -75,7 +78,7 @@ app.get("/list", authMiddleware, async ({ req, json }) => {
     const skip = (pageNumber - 1) * limitNumber;
 
     // Retrieve the paginated data
-    const shoppingLists = await ShoppingList.find().skip(skip).limit(limitNumber).exec();
+    const shoppingLists = await ShoppingList.find({ owner: userId }).skip(skip).limit(limitNumber).exec();
 
     // Get the total count of documents
     const totalDocuments = await ShoppingList.countDocuments();
@@ -102,8 +105,6 @@ app.get("/list", authMiddleware, async ({ req, json }) => {
 });
 
 app.put("/list/:id", authMiddleware, validateRequest(updateListSchema), async (c) => {
-  console.log("update list called");
-  
   const userId = c.env.userId;
   if (!userId) {
     return c.json({ error: "Unauthorized" }, 401);
@@ -111,8 +112,6 @@ app.put("/list/:id", authMiddleware, validateRequest(updateListSchema), async (c
 
   const { id } = c.req.param();
   const body = await c.req.json();
-
-  console.log(JSON.stringify({ id, body }, null, 2));
 
   const updatedList = await ShoppingList.findByIdAndUpdate(id, body, { new: true });
   if (!updatedList) {
@@ -129,7 +128,25 @@ app.delete("/list/:id", authMiddleware, async (c) => {
   }
 
   const { id } = c.req.param();
+
   const list = await ShoppingList.findById(id);
+  console.log(JSON.stringify(list, null, 2));
+
+  const sharedList = await ShoppingList.findById({ participants: { $in: [userId] } });
+  if (sharedList) {
+    const updatedList = {
+      ...sharedList,
+      participants: sharedList.participants.filter((participant) => participant.toString() !== userId),
+    };
+
+    const result = await ShoppingList.findByIdAndUpdate(id, updatedList, { new: true });
+    if (!result) {
+      return c.json({ error: "List not found" }, 404);
+    }
+
+    return c.json({ message: "User removed from participants list" }, 200);
+  }
+
   if (!list) {
     return c.json({ error: "List not found" }, 404);
   }
@@ -141,4 +158,68 @@ app.delete("/list/:id", authMiddleware, async (c) => {
   await list.deleteOne();
 
   return c.json({ message: "List deleted successfully" });
+});
+
+app.get("/shared", authMiddleware, async (c) => {
+  console.log("BBB shared lists called");
+
+  const userId = c.env.userId;
+  if (!userId) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const shoppingLists = await ShoppingList.find({ participants: { $in: [userId] } });
+  if (!shoppingLists) {
+    return c.json({ error: "No shared lists found" }, 404);
+  }
+
+  return c.json({ message: "Shared lists fetched successfully", shoppingLists });
+});
+
+const SharedListRequestBodySchema = z.object({
+  listId: z.string(),
+  participants: z.array(z.string().email()),
+});
+
+app.post("/share/list", authMiddleware, async (c) => {
+  const userId = c.env.userId;
+  if (!userId) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const body = await c.req.json();
+  const bodyResult = SharedListRequestBodySchema.safeParse(body);
+  if (!bodyResult.success) {
+    return c.json({ error: "Invalid request body", details: bodyResult.error.issues }, 400);
+  }
+
+  const { listId, participants } = bodyResult.data;
+
+  const list = await ShoppingList.findById(listId);
+  if (!list) {
+    return c.json({ error: "List not found" }, 404);
+  }
+
+  if (list.owner.toString() !== userId) {
+    return c.json({ error: "Forbidden" }, 403);
+  }
+
+  // Find users whose email is in the provided emails array.
+  const users = await User.find({ email: { $in: participants } });
+
+  // Map the found users to their IDs.
+  const participantIds = users.map(user => user._id);
+  if (participantIds.length === 0) {
+    return c.json({ error: "No valid users found for the provided emails." }, 404);
+  }
+
+  // Update the shopping list by adding the new participant IDs.
+  // $addToSet with $each will add each id only if it's not already present.
+  const updatedList = await ShoppingList.findByIdAndUpdate(
+    listId,
+    { $addToSet: { participants: { $each: participantIds } } },
+    { new: true }
+  );
+
+  return c.json({ message: "List shared successfully", updatedList });
 });

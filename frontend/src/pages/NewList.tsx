@@ -52,7 +52,7 @@ const NewList = () => {
 
   return (
     <Layout>
-      <div className="flex w-screen h-screen ">
+      <div className="flex w-screen h-full min-h-screen ">
         <AppSidebar />
         <div className="flex flex-col w-full h-full justify-start items-start">
           <AppHeader breadcrumbItems={breadcrumbItems} />
@@ -153,7 +153,7 @@ const NewList = () => {
                         type="button"
                         variant="default"
                         className="btn-primary"
-                        onClick={() => append({ name: "", quantity: 1, unit: "" })}
+                        onClick={() => append({ name: "", quantity: "1", unit: "" })}
                       >
                         Add Product
                       </Button>

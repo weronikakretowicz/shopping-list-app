@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -12,12 +12,13 @@ import { LoginFormValues, loginSchema } from "@/schemas/loginSchema";
 import { clsx } from "clsx";
 import { ROUTES } from "./routes";
 import { useAccessToken } from "@/atoms/accessToken";
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const loginMutation = useLogin();
-  const [, setAccessToken] = useAccessToken();
+  const [accessToken, setAccessToken] = useAccessToken();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,13 +36,19 @@ export default function Login() {
       if (result?.token) {
         setAccessToken(result.token);
         localStorage.setItem("access_token", result.token);
-
-        navigate(ROUTES.MYLISTS);
       }
-    } finally {
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Invalid email or password");
       setLoading(false);
     }
   };
+
+  useLayoutEffect(() => {
+    if (accessToken) {
+      navigate(ROUTES.MYLISTS);
+    }
+  }, [accessToken]);
 
   return (
     <div className="relative h-screen w-screen">
