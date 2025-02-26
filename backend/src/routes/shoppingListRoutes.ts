@@ -2,9 +2,9 @@ import { z } from "zod";
 import { app } from "../app";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { ShoppingList } from "../models/ShoppingList";
+import { User } from "../models/User";
 import { createListSchema, updateListSchema } from "../validators/listValidators";
 import { validateRequest } from "../validators/validateRequest";
-import { User } from "../models/User";
 
 app.get("/shopping-list/status", (c) => {
   console.log("shoping list status check");
@@ -130,22 +130,6 @@ app.delete("/list/:id", authMiddleware, async (c) => {
   const { id } = c.req.param();
 
   const list = await ShoppingList.findById(id);
-  console.log(JSON.stringify(list, null, 2));
-
-  const sharedList = await ShoppingList.findById({ participants: { $in: [userId] } });
-  if (sharedList) {
-    const updatedList = {
-      ...sharedList,
-      participants: sharedList.participants.filter((participant) => participant.toString() !== userId),
-    };
-
-    const result = await ShoppingList.findByIdAndUpdate(id, updatedList, { new: true });
-    if (!result) {
-      return c.json({ error: "List not found" }, 404);
-    }
-
-    return c.json({ message: "User removed from participants list" }, 200);
-  }
 
   if (!list) {
     return c.json({ error: "List not found" }, 404);
@@ -161,8 +145,6 @@ app.delete("/list/:id", authMiddleware, async (c) => {
 });
 
 app.get("/shared", authMiddleware, async (c) => {
-  console.log("BBB shared lists called");
-
   const userId = c.env.userId;
   if (!userId) {
     return c.json({ error: "Unauthorized" }, 401);
@@ -208,7 +190,7 @@ app.post("/share/list", authMiddleware, async (c) => {
   const users = await User.find({ email: { $in: participants } });
 
   // Map the found users to their IDs.
-  const participantIds = users.map(user => user._id);
+  const participantIds = users.map((user) => user._id);
   if (participantIds.length === 0) {
     return c.json({ error: "No valid users found for the provided emails." }, 404);
   }
@@ -218,8 +200,36 @@ app.post("/share/list", authMiddleware, async (c) => {
   const updatedList = await ShoppingList.findByIdAndUpdate(
     listId,
     { $addToSet: { participants: { $each: participantIds } } },
-    { new: true }
+    { new: true },
   );
 
   return c.json({ message: "List shared successfully", updatedList });
+});
+
+app.delete("/shared/delete/:id", authMiddleware, async (c) => {
+  const userId = c.env.userId;
+  if (!userId) {
+    return c.json({ error: "Unauthorized" }, 401);
+  }
+
+  const { id: listId } = c.req.param();
+  if (!listId) {
+    return c.json({ error: "Mising parameter" }, 401);
+  }
+
+  try {
+    const updatedList = await ShoppingList.findByIdAndUpdate(
+      listId,
+      { $pull: { participants: userId } }, // $pull removes the participant from the array
+      // { new: true }, // Return the updated document
+    );
+
+    console.log(JSON.stringify(updatedList, undefined, 2));
+
+    return c.json({ message: "List deleted successfully" });
+  } catch (error) {
+    console.error(error);
+
+    return c.json({ message: "Unexpected error" }, 500);
+  }
 });

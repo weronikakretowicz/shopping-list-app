@@ -1,0 +1,15 @@
+meta {
+  name: Get notifications
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BACKEND_API}}/notifications/all
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}

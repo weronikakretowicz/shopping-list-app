@@ -1,18 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { useLogin } from "@/api/auth/auth.queries";
+import { useAccessToken } from "@/atoms/accessToken";
 import { Header } from "@/components/Header";
 import { Spinner } from "@/components/Spinner";
-import { useLogin } from "@/api/auth/auth.queries";
-import { LoginFormValues, loginSchema } from "@/schemas/loginSchema";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { type LoginFormValues, loginSchema } from "@/schemas/loginSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { clsx } from "clsx";
-import { ROUTES } from "./routes";
-import { useAccessToken } from "@/atoms/accessToken";
+import { useLayoutEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "./routes";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -44,10 +44,8 @@ export default function Login() {
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useLayoutEffect(() => {
-    console.log("accessToken", accessToken);
-    debugger;
-
     if (accessToken) {
       navigate(ROUTES.MYLISTS);
     }
@@ -65,7 +63,7 @@ export default function Login() {
           >
             <Header />
           </div>
-          <div className="absolute inset-0 bg-black opacity-40"></div>
+          <div className="absolute inset-0 bg-black opacity-40" />
 
           <div className="flex items-center justify-center mt-32 z-10 font-semibold">
             <h1>Welcome Back!</h1>

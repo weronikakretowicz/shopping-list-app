@@ -1,4 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useUserDetails } from "@/api/useUserDetails.ts";
+import SignOutDialog from "@/components/SignOutDialog.tsx";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+// import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -10,16 +19,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { ROUTES } from "@/pages/routes.ts";
 import { ClipboardDocumentListIcon, ClipboardIcon, UserIcon } from "@heroicons/react/24/outline";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu.tsx";
 import { ChevronUp } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
-import SignOutDialog from "@/components/SignOutDialog.tsx";
 
 type AppSidebarProps = {
   currUrl?: string;
@@ -28,21 +30,22 @@ type AppSidebarProps = {
 const items = [
   {
     title: "My Lists",
-    url: "/myLists",
+    url: ROUTES.MYLISTS,
     icon: <ClipboardDocumentListIcon />,
   },
   {
     title: "Shared Lists",
-    url: "/sharedLists",
+    url: ROUTES.SHAREDLISTS,
     icon: <ClipboardIcon />,
   },
 ];
 
 export const AppSidebar = ({ currUrl = "" }: AppSidebarProps) => {
-  const navigate = useNavigate();
+  const { data } = useUserDetails();
+  // const navigate = useNavigate();
 
   const handleAccountClick = () => {
-    navigate("/profile");
+    // navigate("/profile");
   };
 
   return (
@@ -57,8 +60,8 @@ export const AppSidebar = ({ currUrl = "" }: AppSidebarProps) => {
                   <SidebarMenuButton
                     asChild
                     isActive={
-                      (currUrl === "/myLists" && item.title === "My Lists") ||
-                      (currUrl === "/sharedLists" && item.title === "Shared Lists")
+                      (currUrl === ROUTES.MYLISTS && item.title === "My Lists") ||
+                      (currUrl === ROUTES.SHAREDLISTS && item.title === "Shared Lists")
                     }
                   >
                     <a href={item.url}>
@@ -84,8 +87,8 @@ export const AppSidebar = ({ currUrl = "" }: AppSidebarProps) => {
                       <AvatarFallback>UN</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col items-start">
-                      <span className="font-bold">Username</span>
-                      <span className="text-muted">user@example.com</span>
+                      <span className="font-bold">{data?.name ?? "Username"}</span>
+                      <span className="text-muted">{data?.email ?? "user@example.com"}</span>
                     </div>
                   </div>
                   <ChevronUp className="w-4 h-4" />

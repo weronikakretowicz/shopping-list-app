@@ -1,3 +1,5 @@
+import { useGetNotifications } from "@/api/notifications/useGetNotifications.ts";
+import { useReadNotification } from "@/api/notifications/useReadNotification.ts";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,35 +9,82 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-// import { useNavigate } from 'react-router-dom';
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { REFRESH_INTERVAL } from "@/constants/intervals.ts";
 import { BellIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
+import { Fragment, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-type BreadcrumbItem = {
+type ActionType = "added" | "modified";
+
+type Notification = {
+  _id: string;
+  senderId: {
+    _id: string;
+    username: string;
+  };
+  receiverId: {
+    _id: string;
+    username: string;
+  };
+  isRead: boolean;
+  listId: {
+    _id: string;
+    name: string;
+  };
+  actionType: ActionType;
+  timestamp: string;
+  __v: number;
+};
+
+export type BreadCrumbItem = {
   label: string;
-  path?: string;
+  path: string;
 };
 
 type AppHeaderProps = {
-  breadcrumbItems?: BreadcrumbItem[];
+  breadcrumbItems?: BreadCrumbItem[];
+};
+
+const getActionResult = (notification: Notification | undefined) => {
+  if (!notification) {
+    return null;
+  }
+
+  return notification.actionType === "added"
+    ? `has added you to the "${notification.listId.name}" list`
+    : `has modified the "${notification.listId.name}" list`;
 };
 
 const AppHeader = ({ breadcrumbItems = [] }: AppHeaderProps) => {
-  // const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const navigate = useNavigate();
+  const { data: notifications, refetch } = useGetNotifications(REFRESH_INTERVAL);
+  const { mutate: readNotification } = useReadNotification();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    socket.on("getNotifications", (data: Notification) => {
-      setNotifications((prev) => [...prev, data]);
-    });
-  }, [socket]);
+  const displayNotification = (notification: Notification | undefined) => {
+    const notificationResult = getActionResult(notification);
+    if (!notification || !notificationResult) {
+      return null;
+    }
 
-  const displayNotification = ({ senderName, actionType }) => {
-    const action = actionType === "added" ? "has added you to the list" : "has modified the list";
+    return (
+      <div className="flex flex-col bg-white">
+        <span className="p-1 text-sm">{`${notification.senderId.username} ${notificationResult}`}</span>
+        <hr className="border-gray-200 dark:border-gray-700 my-1" />
+      </div>
+    );
+  };
 
-    return <span className="p-1 text-sm">{`${senderName} ${action}`}</span>;
+  const handleRead = () => {
+    if (notifications) {
+      // biome-ignore lint/complexity/noForEach: <explanation>
+      notifications.forEach((notification) => {
+        readNotification({ notificationId: notification._id });
+      });
+    }
+    refetch();
+    setOpen(false);
   };
 
   return (
@@ -45,53 +94,55 @@ const AppHeader = ({ breadcrumbItems = [] }: AppHeaderProps) => {
 
         <Breadcrumb>
           <BreadcrumbList>
-            {/*<BreadcrumbItem>*/}
-            {/*    <BreadcrumbLink href="/myLists">My Lists</BreadcrumbLink>*/}
-            {/*</BreadcrumbItem>*/}
-            {/*<BreadcrumbSeparator />*/}
-            {/*<BreadcrumbItem>*/}
-            {/*    <BreadcrumbLink href="/components">Components</BreadcrumbLink>*/}
-            {/*</BreadcrumbItem>*/}
-            {/*<BreadcrumbSeparator />*/}
-            {/*<BreadcrumbItem>*/}
-            {/*    <BreadcrumbPage>Breadcrumb</BreadcrumbPage>*/}
-            {/*</BreadcrumbItem>*/}
-
             {breadcrumbItems.map((item, index) => (
-              <React.Fragment key={index}>
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <Fragment key={index}>
                 <BreadcrumbItem>
                   {index === breadcrumbItems.length - 1 || !item.path ? (
                     <BreadcrumbPage>{item.label}</BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink
                       href={item.path}
-                      // onClick={(e) => {
-                      //     e.preventDefault();
-                      //     navigate(item.path);
-                      // }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(item.path);
+                      }}
                     >
                       {item.label}
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
                 {index !== breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
-              </React.Fragment>
+              </Fragment>
             ))}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
-      <div className="flex relative items-center cursor-pointer">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+      <div
+        className="flex relative items-center cursor-pointer"
+        onClick={() => notifications && notifications.length > 0 && setOpen(!open)}
+      >
         <Button variant="ghost" className="p-2 ">
           <BellIcon style={{ width: "20px", height: "20px" }} />
         </Button>
-        <div className="flex absolute w-3.5 h-3.5 top-1.5 right-1.5 bg-red-600 text-secondary rounded-full p-1 text-xs  items-center justify-center">
-          2
+        {notifications && notifications.length > 0 && (
+          <div className="flex absolute w-3.5 h-3.5 top-1.5 right-1.5 bg-red-600 text-secondary rounded-full p-1 text-xs  items-center justify-center">
+            {notifications.length}
+          </div>
+        )}
+      </div>
+
+      {open && (
+        <div className="flex flex-col p-2 absolute top-12 right-4 text-primary font-light border max-h-44 overflow-y-scroll">
+          {/* biome-ignore lint/complexity/useOptionalChain: <explanation> */}
+          {notifications && notifications.map((n) => displayNotification(n))}
+          <Button className="btn-notifications" onClick={() => handleRead()}>
+            Mark as read
+          </Button>
         </div>
-      </div>
-      <div className="flex flex-col p-2 absolute top-12 right-0 text-primary font-light">
-        {notifications.map((n) => displayNotification(n))}
-      </div>
+      )}
     </div>
   );
 };

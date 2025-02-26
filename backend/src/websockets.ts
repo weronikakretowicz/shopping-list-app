@@ -1,6 +1,9 @@
-import { Server } from "socket.io";
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
+import type { Server as HTTPServer } from "http";
+// biome-ignore lint/style/useImportType: <explanation>
+import { Server, Server as SocketIOServer } from "socket.io";
 
-export const startWebSocketServer = (server: any) => {
+export const startWebSocketServer = (server: HTTPServer): SocketIOServer => {
   const io = new Server(server, {
     cors: {
       origin: "*",

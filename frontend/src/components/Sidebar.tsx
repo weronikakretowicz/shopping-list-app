@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/pages/routes.ts";
 import { ClipboardDocumentListIcon, ClipboardIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type IconProps = {
   className: string;
@@ -11,12 +12,12 @@ const NAV_ITEMS = [
   {
     name: "My Lists",
     Icon: ({ className }: IconProps) => <ClipboardDocumentListIcon className={className} />,
-    path: "/myLists",
+    path: ROUTES.MYLISTS,
   },
   {
     name: "Shared Lists",
     Icon: ({ className }: IconProps) => <ClipboardIcon className={className} />,
-    path: "/sharedLists",
+    path: ROUTES.SHAREDLISTS,
   },
 ] as const;
 
@@ -46,8 +47,8 @@ export const Sidebar = () => {
         {NAV_ITEMS.map(({ name, path, Icon }) => {
           let isActive = pathname.startsWith(path);
 
-          if (path === "/myLists") {
-            isActive = pathname.startsWith("/myLists") || pathname.startsWith("/newList");
+          if (path === ROUTES.MYLISTS) {
+            isActive = pathname.startsWith(ROUTES.MYLISTS) || pathname.startsWith(ROUTES.NEWLIST);
           }
 
           return (

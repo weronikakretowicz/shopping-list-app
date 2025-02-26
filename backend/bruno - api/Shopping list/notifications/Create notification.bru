@@ -1,0 +1,24 @@
+meta {
+  name: Create notification
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BACKEND_API}}/notification/create
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "senderId": "67beffe7a615d5fb8a844064",
+    "receiverId": "67bf50884a3537d5fde742ea",
+    "listId": "67bf0114a615d5fb8a84407b",
+    "actionType": "added"
+  }
+}

@@ -1,17 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import WelcomePage from "./pages/WelcomePage";
+import MyListsPage from "@/pages/MyListsPage.tsx";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { Toaster } from "react-hot-toast";
-import { Board } from "./pages/Board.tsx";
-import MyListsPage from "@/pages/MyListsPage.tsx";
+import WelcomePage from "./pages/WelcomePage";
 
+import EditList from "@/pages/EditList.tsx";
+import EditSharedListList from "@/pages/EditSharedList.tsx";
+import NewList from "@/pages/NewList.tsx";
+import SharedListsPage from "@/pages/SharedListsPage.tsx";
+import { Logout } from "./pages/Logout.tsx";
 import { ROUTES } from "./pages/routes";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
-import { Logout } from "./pages/Logout.tsx";
-import SharedListsPage from "@/pages/SharedListsPage.tsx";
-import NewList from "@/pages/NewList.tsx";
-import EditList from "@/pages/EditList.tsx";
 
 function App() {
   return (
@@ -21,14 +21,6 @@ function App() {
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route path={ROUTES.LOGOUT} element={<Logout />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-        <Route
-          path={ROUTES.BOARD}
-          element={
-            <ProtectedRoute>
-              <Board />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path={ROUTES.MYLISTS}
           element={
@@ -58,6 +50,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EditList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.EDIT_SHAREDLISTS}
+          element={
+            <ProtectedRoute>
+              <EditSharedListList />
             </ProtectedRoute>
           }
         />

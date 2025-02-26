@@ -1,16 +1,17 @@
-import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
-  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { ROUTES } from "@/pages/routes.ts";
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 type SignOutDialogProps = {
   triggerClassName?: string;
@@ -21,7 +22,7 @@ const SignOutDialog = ({ triggerClassName }: SignOutDialogProps) => {
 
   const handleSignOut = () => {
     localStorage.removeItem("access_token");
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
   };
 
   return (
