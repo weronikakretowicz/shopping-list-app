@@ -7,7 +7,7 @@ type UserDetails = {
   createdAt: string;
 };
 
-export const useUserDetails = () => {
+export const useGetUserDetails = () => {
   return useQuery({
     queryKey: ["user-details"],
     queryFn: async () => {

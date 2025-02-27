@@ -4,7 +4,12 @@ import { app } from "../app";
 import { JWT_SECRET } from "../config";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { User } from "../models/User";
-import { loginSchema, registerSchema } from "../validators/userValidators";
+import {
+  loginSchema,
+  registerSchema,
+  updateUserPasswordSchema,
+  updateUsernameAndEmailSchema,
+} from "../validators/userValidators";
 import { validateRequest } from "../validators/validateRequest";
 
 app.get("/users/status", (c) => {
@@ -88,5 +93,43 @@ app.get("/user/details", authMiddleware, async ({ json, env, req }) => {
     name: user.username,
     email: user.email,
     createdAt: user.createdAt,
+    passwordHash: user.passwordHash,
   });
+});
+
+app.put("/user/updateUsernameAndEmail", authMiddleware, validateRequest(updateUsernameAndEmailSchema), async (c) => {
+  const userId = c.env.userId;
+  const { username, email } = await c.req.json();
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return c.json({ error: "User not found" }, 404);
+  }
+
+  user.username = username;
+  user.email = email;
+  await user.save();
+
+  return c.json({ message: "Username and email updated successfully" });
+});
+
+app.put("/user/updateUserPassword", authMiddleware, validateRequest(updateUserPasswordSchema), async (c) => {
+  const userId = c.env.userId;
+  const { oldPassword, newPassword } = await c.req.json();
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return c.json({ error: "User not found" }, 404);
+  }
+
+  const isValidPassword = await bcrypt.compare(oldPassword, user.passwordHash);
+  if (!isValidPassword) {
+    return c.json({ error: "Invalid current password" }, 401);
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  user.passwordHash = passwordHash;
+  await user.save();
+
+  return c.json({ message: "Password updated successfully" });
 });
