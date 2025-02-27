@@ -124,7 +124,7 @@ app.put("/user/updateUserPassword", authMiddleware, validateRequest(updateUserPa
 
   const isValidPassword = await bcrypt.compare(oldPassword, user.passwordHash);
   if (!isValidPassword) {
-    return c.json({ error: "Invalid current password" }, 401);
+    return c.json({ error: "Invalid current password" }, 409);
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 10);

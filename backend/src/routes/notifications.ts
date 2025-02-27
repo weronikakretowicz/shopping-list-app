@@ -18,8 +18,6 @@ app.get("/notifications/all", authMiddleware, async (c) => {
     .populate({ path: "receiverId", select: "username" })
     .populate({ path: "listId", select: "name" });
 
-  console.log(JSON.stringify(notifications, undefined, 2));
-
   return c.json({ message: "Notifications found", notifications: notifications });
 });
 

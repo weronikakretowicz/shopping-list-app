@@ -7,8 +7,6 @@ import { createListSchema, updateListSchema } from "../validators/listValidators
 import { validateRequest } from "../validators/validateRequest";
 
 app.get("/shopping-list/status", (c) => {
-  console.log("shoping list status check");
-
   return c.json({ message: "Shoping list endpoints available" });
 });
 
@@ -27,15 +25,8 @@ app.get("/list/all", authMiddleware, async (c) => {
 });
 
 app.post("/list", authMiddleware, validateRequest(createListSchema), async (c) => {
-  console.log("create list called");
-
   const body = await c.req.json();
   const userId = c.env.userId; // odczytujemy userId z env
-
-  console.log({
-    body,
-    owner: userId,
-  });
 
   const list = new ShoppingList({
     name: body.name,
@@ -223,8 +214,6 @@ app.delete("/shared/delete/:id", authMiddleware, async (c) => {
       { $pull: { participants: userId } }, // $pull removes the participant from the array
       // { new: true }, // Return the updated document
     );
-
-    console.log(JSON.stringify(updatedList, undefined, 2));
 
     return c.json({ message: "List deleted successfully" });
   } catch (error) {

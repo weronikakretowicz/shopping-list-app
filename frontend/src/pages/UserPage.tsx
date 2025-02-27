@@ -19,7 +19,6 @@ export default function UserPage() {
   const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     if (data) {
@@ -65,8 +64,6 @@ export default function UserPage() {
   };
 
   const handleSavePassword = async () => {
-    setPasswordError("");
-    debugger;
     updateUserPasswordMutation.mutate({ oldPassword, newPassword });
   };
 
