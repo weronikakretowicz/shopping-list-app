@@ -2,6 +2,7 @@ import { z } from "zod";
 import { app } from "../app";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { Notification } from "../models/Notification";
+import { User } from "../models/User";
 
 app.get("/notifications/all", authMiddleware, async (c) => {
   const userId = c.env.userId;
@@ -22,8 +23,7 @@ app.get("/notifications/all", authMiddleware, async (c) => {
 });
 
 const notificationCreateSchema = z.object({
-  senderId: z.string({ required_error: "senderId is required" }),
-  receiverId: z.string({ required_error: "receiverId is required" }),
+  receiverEmail: z.string({ required_error: "receiverEmail is required" }).email(),
   listId: z.string({ required_error: "listId is required" }),
   actionType: z.enum(["added", "modified"], { required_error: "actionType is required" }),
   isRead: z.boolean().optional(),
@@ -36,14 +36,27 @@ app.post("notification/create", authMiddleware, async ({ env, json, req }) => {
     return json({ error: "Unauthorized" }, 401);
   }
 
+
   const body = await req.json();
   const safeParseBody = notificationCreateSchema.safeParse(body);
   if (safeParseBody.error) {
     return json({ error: "Unauthorized" }, 401);
   }
 
+  const receiverId = await User.findOne({ email: safeParseBody.data.receiverEmail });
+  if (!receiverId) {
+    return json({ error: "User not found" }, 404);
+  }
+
   try {
-    const newNotification = new Notification(safeParseBody.data);
+    const newNotification = new Notification({
+      senderId: userId,
+      actionType: safeParseBody.data.actionType,
+      receiverId: receiverId._id,
+      listId: safeParseBody.data.listId,
+      isRead: safeParseBody.data.isRead,
+      timestamp: safeParseBody.data.timestamp,
+    });
     const savedNotification = await newNotification.save();
 
     return json({ message: "Notification saved successfully", notification: savedNotification });

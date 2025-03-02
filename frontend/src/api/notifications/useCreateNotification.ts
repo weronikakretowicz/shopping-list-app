@@ -1,19 +1,15 @@
 import axiosInstance from "@/api/axiosInstance";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 
 type CreateNotificationRequestBody = {
-  senderId: string;
-  receiverId: string;
+  receiverEmail: string;
   listId: string;
-  actionType: string;
+  actionType: "added" | "modified";
   isRead?: boolean;
   timestamp?: string;
 };
 
 export const useCreateNotification = () => {
-  const queryClient = useQueryClient();
-
   const mutation = useMutation({
     mutationKey: ["createNotification"],
     mutationFn: async (requestBody: CreateNotificationRequestBody) => {
@@ -21,14 +17,6 @@ export const useCreateNotification = () => {
       const response = await axiosInstance.post(`/notification/create`, requestBody);
 
       return response.data;
-    },
-    onSuccess: () => {
-      toast.success("Notification created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["createNotification"] });
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    },
-    onError: () => {
-      toast.error("Failed to create notification");
     },
   });
 
