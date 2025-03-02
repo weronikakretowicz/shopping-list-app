@@ -7,9 +7,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+} from "@/components/ui/breadcrumb.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { REFRESH_INTERVAL } from "@/constants/intervals.ts";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
@@ -51,9 +51,10 @@ const getActionResult = (notification: Notification | undefined) => {
     return null;
   }
 
-  return notification.actionType === "added"
-    ? `has added you to the "${notification.listId.name}" list`
-    : `has modified the "${notification.listId.name}" list`;
+  // return notification.actionType === "added"
+  //   ? `has added you to the "${notification.listId.name}" list`
+  //   : `has modified the "${notification.listId.name}" list`;
+  return notification.actionType === "added" ? "has added you to the list" : "has modified the list";
 };
 
 const AppHeader = ({ breadcrumbItems = [] }: AppHeaderProps) => {

@@ -1,7 +1,7 @@
+import AppHeader, { type BreadCrumbItem } from "@/components/AppHeader.tsx";
 import { AppSidebar } from "@/components/AppSidebar.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AppHeader, { type BreadCrumbItem } from "@/pages/AppHeader.tsx";
 import { ROUTES } from "@/pages/routes.ts";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import type { ReactNode } from "react";

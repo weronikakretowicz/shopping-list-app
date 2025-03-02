@@ -1,4 +1,4 @@
-import { useUserDetails } from "@/api/useUserDetails.ts";
+import { useGetUserDetails } from "@/api/user/useGetUserDetails.ts";
 import SignOutDialog from "@/components/SignOutDialog.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
 import {
@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-// import { useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +21,7 @@ import {
 import { ROUTES } from "@/pages/routes.ts";
 import { ClipboardDocumentListIcon, ClipboardIcon, UserIcon } from "@heroicons/react/24/outline";
 import { ChevronUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type AppSidebarProps = {
   currUrl?: string;
@@ -41,11 +41,11 @@ const items = [
 ];
 
 export const AppSidebar = ({ currUrl = "" }: AppSidebarProps) => {
-  const { data } = useUserDetails();
-  // const navigate = useNavigate();
+  const { data } = useGetUserDetails();
+  const navigate = useNavigate();
 
   const handleAccountClick = () => {
-    // navigate("/profile");
+    navigate(ROUTES.USER_PAGE);
   };
 
   return (

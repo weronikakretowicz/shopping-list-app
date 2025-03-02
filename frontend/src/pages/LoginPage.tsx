@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { clsx } from "clsx";
 import { useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "./routes";
 
@@ -39,7 +38,6 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Invalid email or password");
       setLoading(false);
     }
   };
