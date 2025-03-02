@@ -1,13 +1,24 @@
 import { useShareList } from "@/api/shoppingList/useShareList";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { List, ListItem } from "@/types/List";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -111,27 +122,43 @@ const SharePopup = ({
   onEmailsChange: (value: string) => void;
   onSubmit: () => void;
 }) => {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg relative">
-        <button className="absolute top-2 right-2 text-gray-500" onClick={onClose}>
-          &times;
-        </button>
-        <h2 className="text-lg font-semibold mb-4">Share List</h2>
-        <p>Enter email addresses (comma separated):</p>
-        <input
-          type="text"
-          value={emails}
-          onChange={(e) => onEmailsChange(e.target.value)}
-          className="border rounded p-2 w-full mb-4"
-        />
-        <button onClick={onSubmit} className="bg-blue-500 text-white rounded px-4 py-2">
-          Share
-        </button>
-      </div>
-    </div>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()} modal>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-semibold">Share List</DialogTitle>
+          <DialogDescription className="text-gray-600 dark:text-gray-400">
+            Share this list with others to collaborate
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div className="space-y-2">
+            <Label htmlFor="emails" className="text-sm font-medium">
+              Email addresses
+            </Label>
+            <Input
+              id="emails"
+              placeholder="example@email.com, another@email.com"
+              value={emails}
+              onChange={(e) => onEmailsChange(e.target.value)}
+              className="w-full"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Separate multiple emails with commas
+            </p>
+          </div>
+        </div>
+        <DialogFooter className="flex justify-between sm:justify-between">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={onSubmit} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <ShareIcon className="w-4 h-4 mr-2" />
+            Share
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
